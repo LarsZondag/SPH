@@ -30,10 +30,10 @@ class CubicSpline(object):
 
     def gradient(self, r=[0., 0, 0], d=1.0):
         u = d * self.h1
-        if 0 <= u <= 1:
-            tmp = self.h1 * self.h1 * (9 / 4 * u**2 - 3 * u)
+        if 0 < u <= 1:
+            return self.fac * self.h1 * self.h1 * (9 / 4 * u**2 - 3 * u) * r / d
         elif 1 < u <= 2:
-            tmp = self.h1 * self.h1 * (- 3 / 4 * (2 - u)**2)
+            return self.fac * self.h1 * self.h1 * (- 3 / 4 * (2 - u)**2) * r / d
         else:
             tmp = 0
-        return self.fac * tmp * r / d
+        return tmp * r
