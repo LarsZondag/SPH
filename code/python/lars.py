@@ -5,15 +5,16 @@ from numba import jit
 
 
 dim = 2
-c2 = 300
+c2 = 50
 gamma = 7
-density_0 = 100#8
-h = 0.1
+h = 0.5
+kernel = CubicSpline(dim, h)
+m = 1
+density_0 = m * kernel.kernel(d=0) * 2
 lx = 25
 ly = 25
-m = 1
-N_x = 20
-N_y = 20
+N_x = 10
+N_y = 10
 N = N_x * N_y
 pos = np.zeros((N_x * N_y, dim))
 randoms = (np.random.random((N, dim)) - 0.5) * 2 * 0.1
@@ -28,8 +29,7 @@ pos[:,1] /= N_y
 pos[:, 0] *= 0.5 * lx
 pos[:, 1] *= 0.5 * ly
 pos[:, 0] += 0.25 * lx
-pos[:, 1] += 0.1 * ly
-kernel = CubicSpline(dim, h)
+# pos[:, 1] += 0.1 * ly
 v_0 = 10
 vel = np.zeros((N, dim))
 acc = np.zeros((N, dim))
@@ -38,7 +38,7 @@ dt = 0.004
 N_t = 2000
 picture_time = 5
 g = np.array([0, -9.81])
-mu = 0
+mu = 0.5
 nu = 1
 
 @jit
