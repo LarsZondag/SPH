@@ -16,8 +16,9 @@ h_dimensions = h**dimensions
 h_dimensionplusone = h**(dimensions+1)
 sigma = 2/3*(dimensions == 1) + 10/(7*np.pi)*(dimensions == 2) + 1/np.pi*(dimensions == 3)
 m = 1
-density_0 = 1
+density_0 = 20
 c2 = 1
+g = np.array([0, -1])
 gamma = 1                       # See Jos Thijssen notes (typical value for gamma is 7)
 picture_time = 5
 
@@ -79,9 +80,8 @@ def calc_acceleration(P, rho, gradient_W):
 
 def make_time_step(loc, v, old_a):
     loc += v * dt
-    v += 0.5 * old_a * dt
     a = calc_acceleration(pressure, density, gradient_kernel)
-    v += 0.5 * a * dt
+    v += 0.5 * (a + g) * dt
     return loc, a
 
 dt = 0.004
@@ -94,8 +94,9 @@ for t in range(Nt):
     if t % picture_time == 0:
         plt.clf()
         plt.scatter(locations[:, 0], locations[:, 1])
-        #plt.axis([0, lx, 0, ly])
+        plt.axis([-1, 1, -1, 1])
         plt.savefig("plots/"+str(int(t / picture_time))+".png" )
+
 
 
 
