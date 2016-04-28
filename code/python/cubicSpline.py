@@ -28,12 +28,15 @@ class CubicSpline(object):
 
         return val * self.fac
 
-    def gradient(self, r=[0., 0, 0], d=1.0):
+    def gradient(self, r, d):
         u = d * self.h1
-        if 0 < u <= 1:
+        if 10 ** -12 < u <= 1:
             return self.fac * self.h1 * (2.25 * u**2 - 3. * u) / d
         elif 1 < u <= 2:
             return - self.fac * self.h1 * 0.75 * (2. - u) * (2. - u) / d
         else:
             tmp = 0
         return tmp * r
+
+    def laplacian(self, d):
+        return 45 * np.pi * self.h1* self.h1* self.h1* self.h1* self.h1* self.h1 * (self.h - d)
